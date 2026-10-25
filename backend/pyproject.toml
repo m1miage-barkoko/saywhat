@@ -1,0 +1,66 @@
+[project]
+name = "verbatim"
+version = "0.1.0"
+description = "Transcription locale de conversations en français avec séparation des intervenants"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    # --- AI pipeline -------------------------------------------------------
+    # whisperx 3.8.6 is the newest stable release (3.8.7 is still an rc). It
+    # pins torch~=2.8.0 and requires pyannote.audio>=4, so the three pins
+    # below move together. See README "Versions" for the full rationale.
+    "whisperx==3.8.6",
+    "pyannote.audio==4.0.7",
+    "faster-whisper==1.2.1",
+    "ctranslate2==4.8.2",
+    "torch==2.8.0",
+    "torchaudio==2.8.0",
+    # --- app -----------------------------------------------------------------
+    "pydantic>=2.9,<3",
+    "pydantic-settings>=2.6,<3",
+    "soundfile>=0.12,<0.14",
+    "numpy>=2.1,<2.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.7",
+]
+
+[tool.uv]
+# The backend is an application, not a library: run it from this folder
+# (`uv run python -m app...`) instead of building/installing a wheel.
+package = false
+
+# On Windows, PyPI only ships CPU builds of torch. Pull the CUDA 12.8 build
+# instead (it still runs on machines without an NVIDIA GPU). Linux PyPI wheels
+# already include CUDA, and macOS wheels include MPS (Apple Silicon) support.
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32'" }]
+torchaudio = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32'" }]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv.nosync"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+# French UI strings legitimately contain non-ASCII typography (’ « » …).
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "models: needs downloaded AI models (run `python -m app.download_models` first)",
+]
+addopts = "-m 'not models'"
+# Same filter as app/pipeline/__init__.py (pytest resets warning filters per test).
+filterwarnings = ["ignore:(?s).*torchcodec is not installed correctly:UserWarning"]
