@@ -1,5 +1,7 @@
 """Application settings, read from environment variables and from ``<repo>/.env``."""
 
+import os
+import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -43,12 +45,38 @@ class Settings(BaseSettings):
 
     @property
     def models_dir(self) -> Path:
-        """Models we convert ourselves (downloaded models stay in the HF cache)."""
+        """Every model Verbatim downloads or converts (see use_local_model_dirs)."""
         return self.data_dir / "models"
 
     @property
     def bin_dir(self) -> Path:
         return self.data_dir / "bin"
+
+    def use_local_model_dirs(self) -> None:
+        """Make Hugging Face, PyTorch, NLTK and Matplotlib keep their files in `data/`.
+
+        By default each library writes to its own folder in the user's home
+        (~/.cache/huggingface, ~/.cache/torch, ~/nltk_data, ~/.matplotlib). Redirecting
+        them here keeps everything Verbatim downloads inside the project, so deleting
+        the project removes it all. Most of these libraries read their variable once,
+        when imported: entry points call this before importing any model code.
+        """
+        targets = {  # variable: (folder, module that reads it at import time, if any)
+            "HF_HOME": (self.models_dir / "huggingface", "huggingface_hub.constants"),
+            "TORCH_HOME": (self.models_dir / "torch", None),  # read on every use
+            "NLTK_DATA": (self.models_dir / "nltk", "nltk.data"),
+            "MPLCONFIGDIR": (self.data_dir / "cache" / "matplotlib", "matplotlib"),
+        }
+        for variable, (folder, reader) in targets.items():
+            path = str(folder.resolve())
+            if os.environ.get(variable) == path:
+                continue  # already done (calling twice is harmless)
+            if reader in sys.modules:
+                # The library already read the old value: setting it now would be
+                # silently ignored and files would land in the home folder.
+                raise RuntimeError(f"use_local_model_dirs() must run before {reader} is imported")
+            folder.mkdir(parents=True, exist_ok=True)
+            os.environ[variable] = path
 
     def synced_folder_warning(self) -> str | None:
         """A French warning if the data folder is inside a cloud-synced folder."""

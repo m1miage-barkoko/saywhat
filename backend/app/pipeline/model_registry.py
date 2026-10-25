@@ -5,9 +5,10 @@ Every ``*_path(download=False)`` function only looks in local caches; it raises
 ``download=True`` is reserved for ``python -m app.download_models``, the only
 command allowed to use the network (see app/privacy.py).
 
-Downloaded Hugging Face models live in the standard HF cache (``~/.cache/huggingface``,
-shared with other tools, relocatable with ``HF_HOME``). Models we convert or
-binaries we fetch ourselves live under ``<data_dir>/models`` and ``<data_dir>/bin``.
+Everything lives in the data folder: downloaded models under ``<data_dir>/models``
+(the Hugging Face, PyTorch and NLTK caches are redirected there by
+``Settings.use_local_model_dirs``), models we convert under
+``<data_dir>/models/ctranslate2`` and the DeepFilterNet binary under ``<data_dir>/bin``.
 """
 
 import hashlib

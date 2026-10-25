@@ -19,6 +19,8 @@ from app.pipeline.errors import PipelineError
 
 
 def main(argv: list[str] | None = None) -> int:
+    settings = get_settings()
+    settings.use_local_model_dirs()  # before any download library is imported
     parser = argparse.ArgumentParser(
         prog="python -m app.download_models", description=__doc__.split("\n\n")[0]
     )
@@ -26,7 +28,6 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--model", choices=list(registry.WHISPER_MODELS))
     group.add_argument("--all", action="store_true", help="tous les modèles de transcription")
     args = parser.parse_args(argv)
-    settings = get_settings()
 
     default = args.model or settings.whisper_model
     model_ids = list(registry.WHISPER_MODELS) if args.all else [default]

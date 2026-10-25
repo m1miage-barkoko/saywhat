@@ -24,11 +24,12 @@ from app.pipeline.types import ProcessingOptions
 
 
 def main(argv: list[str] | None = None) -> int:
-    # First thing, before any model code imports huggingface_hub (it raises otherwise).
+    # First thing, before any model code imports huggingface_hub (both raise otherwise).
     privacy.enforce_offline()
+    settings = get_settings()
+    settings.use_local_model_dirs()
     parser = _build_parser()
     args = parser.parse_args(argv)
-    settings = get_settings()
 
     try:
         options = ProcessingOptions(

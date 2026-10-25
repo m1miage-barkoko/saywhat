@@ -4,6 +4,12 @@ from pathlib import Path
 
 import pytest
 
+from app.config import get_settings
+
+# Like the app's entry points: models are looked up (and caches written) in the
+# project's data folder, never in the home folder.
+get_settings().use_local_model_dirs()
+
 DATA_DIR = Path(__file__).parent / "data"
 DIALOGUE = DATA_DIR / "dialogue_fr.m4a"  # 2 speakers, ~32 s (scripts/make_test_audio.sh)
 
