@@ -1,0 +1,21 @@
+# Local data: recordings, transcripts, database, converted models. Never commit.
+# Anchored with a leading "/" so backend/tests/data (test fixtures) stays versioned.
+/data/
+/data.nosync/
+.env
+
+# Python
+backend/.venv/
+backend/.venv.nosync/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/node_modules.nosync/
+frontend/dist/
+
+# OS
+.DS_Store
