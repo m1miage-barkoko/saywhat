@@ -28,6 +28,15 @@ def test_importing_the_app_disables_telemetry_even_if_enabled_in_the_shell():
     assert result.stdout.split() == ["false", "1"], result.stderr
 
 
+def test_cli_imports_do_not_load_huggingface_hub_before_going_offline():
+    # The CLI calls enforce_offline() inside main(), after its module imports:
+    # that only works if none of those imports pulls in huggingface_hub.
+    result = run_python(
+        "import sys, app.pipeline.__main__; print('huggingface_hub' in sys.modules)"
+    )
+    assert result.stdout.strip() == "False", result.stderr
+
+
 def test_enforce_offline_refuses_to_run_too_late():
     result = run_python(
         "from huggingface_hub import snapshot_download\n"
