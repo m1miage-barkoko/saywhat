@@ -104,6 +104,20 @@ débruité (`audio_denoised.wav`) pour comparer. L'original n'est jamais modifi�
 « ×2,5 temps réel » : une heure d'audio est transcrite en ≈ 24 min. Mesuré sur 3 min de dialogue,
 modèle déjà chargé, 6 threads, lots de 8. La diarisation et l'alignement s'y ajoutent.
 
+**Temps total sur un enregistrement de 1 h 30** (MacBook Air M4, 16 Go) :
+
+| Étape | `large-v3-turbo` (mesuré) | modèle par défaut |
+|---|---|---|
+| Conversion | 1 min | 1 min |
+| Débruitage | 4 min | 4 min |
+| Diarisation (GPU) | 7 min | 7 min |
+| Transcription | 20 min | ≈ 36 min (estimé à ×2,5) |
+| Alignement des mots | 2 min | 2 min |
+| **Total** | **34 min** | **≈ 50 min** (estimation) |
+
+Mémoire maximale mesurée : 5 Go. Le modèle par défaut reste le plus précis : la précision prime sur
+la vitesse. Pour un résultat plus rapide sur un fichier donné : `--model large-v3-turbo`.
+
 - **GPU NVIDIA** : tout tourne sur le GPU en float16, gardez le modèle par défaut.
 - **Mac Apple Silicon** : la diarisation et l'alignement utilisent le GPU (Metal), mais Whisper
   tourne sur le CPU (int8), car son moteur, CTranslate2, n'a pas de backend Metal.
