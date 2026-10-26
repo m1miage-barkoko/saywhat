@@ -49,7 +49,8 @@ testés — ce sera fait au jalon 6.
    uv sync
    ```
 
-3. **Jeton Hugging Face** (voir ci-dessous), puis **téléchargement des modèles** (≈ 4 Go) :
+3. **Jeton Hugging Face** (voir ci-dessous), puis **téléchargement des modèles** (≈ 4 Go, rangés
+   dans `data/models/` : rien n'est écrit dans votre dossier personnel) :
 
    ```bash
    uv run python -m app.download_models
@@ -158,6 +159,11 @@ Toutes les dépendances transitives sont figées dans `backend/uv.lock`.
 FFmpeg : n'importe quelle version récente. pyannote avertit que `torchcodec` ne trouve pas FFmpeg 4
 à 7 : sans importance, Verbatim lui passe toujours l'audio déjà décodé en mémoire (l'avertissement
 est masqué).
+
+## Désinstallation
+
+Tout ce que Verbatim installe, dans le projet et en dehors, et les commandes pour le retirer :
+[DESINSTALLATION.md](DESINSTALLATION.md).
 
 ## Développement
 
