@@ -180,4 +180,4 @@ enregistrement, utilisez simplement la commande ci-dessus.
 | `… n'est pas encore téléchargé` | `uv run python -m app.download_models` |
 | `Un jeton Hugging Face est nécessaire` / `Accès refusé` | voir « Jeton Hugging Face » ; vérifier que les conditions sont acceptées avec le même compte que le jeton |
 | Transcription dégradée sur un fichier bruité | relancer avec `--no-denoise` et comparer |
-| Projet dans iCloud Drive | sur macOS, iCloud ignore les dossiers en `.nosync` : `data` et `backend/.venv` y pointent (liens symboliques) — ou déplacez le projet hors d'iCloud |
+| Avertissement « dossier synchronisé avec le cloud » | déplacez le projet hors d'iCloud Drive / Dropbox / OneDrive, ou définissez `VERBATIM_DATA_DIR` dans `.env` |
