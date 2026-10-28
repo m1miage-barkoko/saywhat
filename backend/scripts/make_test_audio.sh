@@ -50,4 +50,4 @@ ffmpeg -nostdin -loglevel error -y -i "$tmp/dialogue.wav" \
   -filter_complex "[0:a][1:a]amix=inputs=2:duration=first:normalize=0[a]" -map "[a]" \
   -ar 44100 -ac 1 -c:a aac -b:a 64k "$out"
 
-echo "Écrit : $out ($(ffprobe -v error -show_entries format=duration -of csv=p=0 "$out") s)"
+echo "Written: $out ($(ffprobe -v error -show_entries format=duration -of csv=p=0 "$out") s)"
