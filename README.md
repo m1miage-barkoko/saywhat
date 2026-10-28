@@ -31,6 +31,8 @@ Recordings contain other people's voices and confidential information.
 
 ## Installation
 
+> **Not a developer?** Follow the step-by-step guide instead: [how-to-install.md](how-to-install.md).
+
 Tested on macOS (Apple M4). Linux and Windows are planned (dependencies are configured) but not
 tested yet; that comes with milestone 6.
 
