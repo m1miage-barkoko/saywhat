@@ -27,8 +27,12 @@ what. Everything happens on your own computer: your recordings are never sent an
 
 ## What you need
 
-- **A Mac.** Verbatim has been tested on a MacBook Air with an Apple M4 chip. Windows and Linux are
-  not supported yet.
+- **A Mac with an Apple chip (M1 or later).** Verbatim has been tested on a MacBook Air with an
+  Apple M4 chip. To check yours, click the Apple menu  at the top left, then **About This Mac**:
+  the **Chip** line must say "Apple M…". Macs with an Intel processor cannot run Verbatim. Windows
+  and Linux are not supported yet.
+- **16 GB of memory recommended** (the same About This Mac window shows it). 8 GB may work but has
+  not been tested.
 - **About 6 GB of free disk space.**
 - **An internet connection, only during installation.** Afterwards, Verbatim works offline.
 - **About 30 minutes**, plus download time.

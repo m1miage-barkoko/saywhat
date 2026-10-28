@@ -63,7 +63,9 @@ and does not remove it:
 |---|---|
 | `$(getconf DARWIN_USER_TEMP_DIR)com.apple.MetalPerformanceShadersGraph/` | empty `mpsgraph-…` folders (0 bytes of data, several thousand folders after a few runs) |
 
-This folder is not under Verbatim's control (it ignores `TMPDIR`). It can be deleted at any time.
+This folder is not under Verbatim's control (it ignores `TMPDIR`). **Restarting the Mac removes
+it** (verified): you only need to delete it by hand if you don't want to restart. It can be deleted
+at any time, and the next transcription creates it again.
 
 ### Hugging Face account
 
@@ -83,7 +85,7 @@ uv cache clean
 # 2. The project itself (environment, models, data, caches, .env)
 rm -rf path/to/verbatim      # for example ~/IdeaProjects/verbatim
 
-# 3. Empty folders left by Apple's Metal framework
+# 3. Empty folders left by Apple's Metal framework (or simply restart the Mac)
 rm -rf "$(getconf DARWIN_USER_TEMP_DIR)com.apple.MetalPerformanceShadersGraph"
 
 # 4. ffmpeg and uv, then the dependencies nothing needs any more

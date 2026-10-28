@@ -29,12 +29,29 @@ Recordings contain other people's voices and confidential information.
 - Data is stored in `data/` (configurable). **Do not put this folder in a synced folder** (iCloud
   Drive, Dropbox, OneDrive…): your recordings would be uploaded. Verbatim shows a warning if it is.
 
+## Compatibility
+
+| System | Status |
+|---|---|
+| macOS on Apple Silicon (M1 and later) | **tested** (MacBook Air M4, 16 GB) |
+| macOS on Intel | **not supported**: PyTorch 2.8 no longer publishes Intel Mac builds |
+| Linux (x86_64, arm64) | configured, not tested yet |
+| Windows (x86_64) | configured, not tested yet |
+
+Linux and Windows will be tested in milestone 6. On those systems an NVIDIA GPU makes everything
+faster but is not required.
+
+- **Memory**: 16 GB recommended. The measured peak is 5 GB, so 8 GB may work, but this has not
+  been tested.
+- **Disk space**: about 6 GB free (1 GB of Python dependencies, about 4 GB of models), plus the
+  recordings you transcribe.
+- **Internet**: needed only once, for the installation and the model download.
+
 ## Installation
 
 > **Not a developer?** Follow the step-by-step guide instead: [how-to-install.md](how-to-install.md).
 
-Tested on macOS (Apple M4). Linux and Windows are planned (dependencies are configured) but not
-tested yet; that comes with milestone 6.
+Check [Compatibility](#compatibility) first.
 
 1. **Prerequisites**: [ffmpeg](https://ffmpeg.org) and [uv](https://docs.astral.sh/uv/) (which
    installs the right Python version by itself).
