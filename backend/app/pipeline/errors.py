@@ -1,4 +1,4 @@
-"""Errors whose message is meant for the end user, hence written in French."""
+"""Errors whose message is meant for the end user (printed as is by the CLI)."""
 
 
 class PipelineError(Exception):

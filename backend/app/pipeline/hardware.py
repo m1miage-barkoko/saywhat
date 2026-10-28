@@ -39,7 +39,7 @@ def detect_device(
         vram_gb = props.total_memory / 1024**3
         return DeviceProfile(
             kind="cuda",
-            description=f"GPU NVIDIA {props.name} ({vram_gb:.0f} Go)",
+            description=f"NVIDIA GPU {props.name} ({vram_gb:.0f} GB)",
             whisper_device="cuda",
             whisper_compute_type="float16",
             torch_device="cuda",
@@ -53,7 +53,7 @@ def detect_device(
     if preference in ("auto", "mps") and torch.backends.mps.is_available():
         return DeviceProfile(
             kind="mps",
-            description=f"{_apple_chip_name()} — Whisper sur CPU, diarisation sur GPU (Metal)",
+            description=f"{_apple_chip_name()} — Whisper on CPU, diarization on GPU (Metal)",
             whisper_device="cpu",
             whisper_compute_type="int8",
             torch_device="mps",
@@ -63,7 +63,7 @@ def detect_device(
 
     return DeviceProfile(
         kind="cpu",
-        description=f"CPU uniquement ({threads} threads)",
+        description=f"CPU only ({threads} threads)",
         whisper_device="cpu",
         whisper_compute_type="int8",
         torch_device="cpu",

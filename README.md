@@ -6,8 +6,8 @@ Give it a phone recording (m4a, mp3, amr…) and Verbatim returns readable text 
 identified (`Speaker 1`, `Speaker 2`…):
 
 ```
-[00:00:00] Speaker 1 : Bonjour Claire, alors pour la livraison de mardi, on en est où ?
-[00:00:04] Speaker 2 : Bonjour, oui, il faudra prévoir 2 palettes, et le camion arrive vers 10 heures.
+[00:00:00] Speaker 1: Bonjour Claire, alors pour la livraison de mardi, on en est où ?
+[00:00:04] Speaker 2: Bonjour, oui, il faudra prévoir 2 palettes, et le camion arrive vers 10 heures.
 ```
 
 > **Status: milestone 1 of 6.** The pipeline works from the command line. The API, web interface,

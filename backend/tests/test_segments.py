@@ -61,7 +61,7 @@ def test_format_transcript_uses_speaker_labels():
     )  # fmt: skip
 
     assert format_transcript(transcript).splitlines() == [
-        "[00:01:12] Speaker 1 : Bonjour, alors pour la livraison de mardi… On en est où ?",
-        "[00:01:20] M. Dupont : Oui, il faudra prévoir deux palettes.",
-        "[00:01:23] Speaker 1 : Parfait. Merci.",
+        "[00:01:12] Speaker 1: Bonjour, alors pour la livraison de mardi… On en est où ?",
+        "[00:01:20] M. Dupont: Oui, il faudra prévoir deux palettes.",
+        "[00:01:23] Speaker 1: Parfait. Merci.",
     ]

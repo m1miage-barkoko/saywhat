@@ -48,6 +48,6 @@ def format_timestamp(seconds: float) -> str:
 def format_transcript(transcript: Transcript) -> str:
     """The conversation as plain text, one paragraph per speaker turn."""
     return "\n".join(
-        f"[{format_timestamp(p.start)}] {transcript.speaker_label(p.speaker)} : {p.text}"
+        f"[{format_timestamp(p.start)}] {transcript.speaker_label(p.speaker)}: {p.text}"
         for p in merge_consecutive(transcript.segments)
     )
