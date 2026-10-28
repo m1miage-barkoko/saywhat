@@ -42,8 +42,8 @@ class DeepFilterNetDenoiser:
             produced = Path(out_dir) / src.name
             if result.returncode != 0 or not produced.is_file():
                 raise DenoiseError(
-                    "Le débruitage a échoué.",
+                    "Noise reduction failed.",
                     hint=(result.stderr.strip()[-1000:] or None)
-                    or "Relancez le traitement sans débruitage.",
+                    or "Process the file again without noise reduction.",
                 )
             produced.replace(dst)

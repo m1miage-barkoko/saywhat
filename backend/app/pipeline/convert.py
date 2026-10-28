@@ -42,8 +42,8 @@ def _executable(name: str) -> str:
     path = shutil.which(name)
     if path is None:
         raise PipelineError(
-            f"{name} est introuvable.",
-            hint="Installez ffmpeg (voir le README) puis relancez Verbatim.",
+            f"{name} not found.",
+            hint="Install ffmpeg (see the README), then start Verbatim again.",
         )
     return path
 
@@ -51,7 +51,7 @@ def _executable(name: str) -> str:
 def probe(path: Path) -> AudioInfo:
     """Read the duration and format of the first audio track; reject broken files."""
     if not path.is_file():
-        raise AudioConversionError(f"Fichier introuvable : {path}")
+        raise AudioConversionError(f"File not found: {path}")
     cmd = [
         _executable("ffprobe"),
         "-v", "error",
@@ -63,17 +63,17 @@ def probe(path: Path) -> AudioInfo:
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         raise AudioConversionError(
-            f"Fichier audio illisible ou corrompu : {path.name}",
+            f"Unreadable or corrupted audio file: {path.name}",
             hint=result.stderr.strip() or None,
         )
     data = json.loads(result.stdout or "{}")
     streams = data.get("streams") or []
     if not streams:
-        raise AudioConversionError(f"Aucune piste audio dans {path.name}.")
+        raise AudioConversionError(f"No audio track in {path.name}.")
     try:
         duration = float(data["format"]["duration"])
     except (KeyError, ValueError):
-        raise AudioConversionError(f"Durée illisible pour {path.name}.") from None
+        raise AudioConversionError(f"Could not read the duration of {path.name}.") from None
     stream = streams[0]
     return AudioInfo(
         duration=duration,
@@ -132,9 +132,7 @@ def to_wav(
         stderr = err.read()[-2000:]
     if returncode != 0:
         tmp.unlink(missing_ok=True)
-        raise AudioConversionError(
-            f"La conversion de {src.name} a échoué.", hint=stderr.strip() or None
-        )
+        raise AudioConversionError(f"Converting {src.name} failed.", hint=stderr.strip() or None)
     tmp.replace(dst)
     if progress:
         progress(1.0)
@@ -146,7 +144,7 @@ def load_wav(path: Path) -> np.ndarray:
     audio, sample_rate = sf.read(path, dtype="float32", always_2d=False)
     if sample_rate != SAMPLE_RATE or audio.ndim != 1:
         raise AudioConversionError(
-            f"{path.name} n'est pas un WAV mono {SAMPLE_RATE} Hz "
+            f"{path.name} is not a mono {SAMPLE_RATE} Hz WAV "
             f"({sample_rate} Hz, {audio.ndim} dimension(s))."
         )
     return audio

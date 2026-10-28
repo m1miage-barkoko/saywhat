@@ -27,11 +27,11 @@ from app.pipeline.types import ProcessingInfo, ProcessingOptions, Transcript
 STEPS = ("convert", "denoise", "diarize", "transcribe", "align", "assign")
 STEP_LABELS = {
     "convert": "Conversion",
-    "denoise": "Débruitage",
-    "diarize": "Diarisation (qui parle quand)",
+    "denoise": "Noise reduction",
+    "diarize": "Diarization (who speaks when)",
     "transcribe": "Transcription",
-    "align": "Alignement des mots",
-    "assign": "Attribution des intervenants",
+    "align": "Word alignment",
+    "assign": "Speaker attribution",
 }
 
 # Called as on_progress(step, fraction_of_that_step).
@@ -73,7 +73,7 @@ class LocalModels:
             ready = model_registry.align_model_ready() and model_registry.sentence_splitter_ready()
             if not ready:
                 raise ModelNotAvailableError(
-                    "Le modèle d'alignement des mots n'est pas encore téléchargé.",
+                    "The word alignment model has not been downloaded yet.",
                     hint=model_registry.DOWNLOAD_HINT,
                 )
             self._aligner = WhisperXAligner(self.device.torch_device)

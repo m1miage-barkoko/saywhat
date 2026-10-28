@@ -15,7 +15,7 @@ DIALOGUE = DATA_DIR / "dialogue_fr.m4a"  # 2 speakers, ~32 s (scripts/make_test_
 
 requires_ffmpeg = pytest.mark.skipif(
     shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None,
-    reason="ffmpeg n'est pas installé",
+    reason="ffmpeg is not installed",
 )
 
 

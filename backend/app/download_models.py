@@ -26,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--model", choices=list(registry.WHISPER_MODELS))
-    group.add_argument("--all", action="store_true", help="tous les modèles de transcription")
+    group.add_argument("--all", action="store_true", help="all transcription models")
     args = parser.parse_args(argv)
 
     default = args.model or settings.whisper_model
@@ -36,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
         spec = registry.get_whisper_spec(model_id)
         tasks.append(
             (
-                f"Transcription : {spec.label} (~{spec.download_gb:g} Go)",
+                f"Transcription: {spec.label} (~{spec.download_gb:g} GB)",
                 partial(
                     registry.whisper_model_path,
                     model_id,
@@ -46,10 +46,10 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
     tasks += [
-        ("Alignement des mots : wav2vec2 français (360 Mo)", _align_model),
-        ("Découpage en phrases : NLTK punkt", registry.download_sentence_splitter),
+        ("Word alignment: French wav2vec2 (360 MB)", _align_model),
+        ("Sentence splitting: NLTK punkt", registry.download_sentence_splitter),
         (
-            f"Diarisation : {settings.diarization_model} (35 Mo)",
+            f"Diarization: {settings.diarization_model} (35 MB)",
             partial(
                 registry.diarization_model_path,
                 settings.diarization_model,
@@ -58,7 +58,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         ),
         (
-            f"Débruitage : DeepFilterNet {registry.DEEPFILTER_VERSION} (30 Mo)",
+            f"Noise reduction: DeepFilterNet {registry.DEEPFILTER_VERSION} (30 MB)",
             partial(registry.deepfilter_binary_path, settings.bin_dir, download=True),
         ),
     ]
@@ -72,12 +72,12 @@ def main(argv: list[str] | None = None) -> int:
             failures += 1
             print(f"  ✗ {exc}", flush=True)
         else:
-            print("  ✓ prêt", flush=True)
+            print("  ✓ ready", flush=True)
 
     if failures:
-        print(f"\n{failures} élément(s) manquant(s). Corrigez puis relancez cette commande.")
+        print(f"\n{failures} item(s) missing. Fix the problems above and run this command again.")
         return 1
-    print("\nTout est prêt. Verbatim peut maintenant fonctionner hors ligne.")
+    print("\nAll set. Verbatim can now run offline.")
     return 0
 
 

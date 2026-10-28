@@ -11,7 +11,7 @@ independent models whose boundaries never match exactly. Rules, in order:
 5. Each sentence is split wherever the speaker changes.
 
 Speakers are then renumbered by order of first appearance: the first voice heard
-becomes "Intervenant 1".
+becomes "Speaker 1".
 """
 
 from bisect import bisect_left
@@ -20,7 +20,7 @@ from itertools import groupby
 
 from app.pipeline.types import AlignedSegment, Segment, Speaker, SpeakerTurn, Word
 
-SPEAKER_LABEL = "Intervenant {n}"
+SPEAKER_LABEL = "Speaker {n}"
 SINGLE_SPEAKER = "SPEAKER_00"  # when diarization is skipped or finds nobody
 _EPSILON = 1e-3  # gives zero-length words a 1 ms extent so overlaps are measurable
 

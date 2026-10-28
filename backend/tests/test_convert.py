@@ -90,9 +90,9 @@ def test_corrupted_file_raises_a_readable_error(tmp_path):
     broken = tmp_path / "broken.m4a"
     broken.write_bytes(b"\x00\x00\x00\x20ftypM4A " + b"garbage" * 100)
 
-    with pytest.raises(AudioConversionError, match="illisible ou corrompu"):
+    with pytest.raises(AudioConversionError, match="Unreadable or corrupted"):
         convert.probe(broken)
-    with pytest.raises(AudioConversionError, match="a échoué"):
+    with pytest.raises(AudioConversionError, match="failed"):
         convert.to_wav(broken, tmp_path / "out.wav")
     assert not (tmp_path / "out.wav").exists()
     assert not (tmp_path / "out.wav.part").exists()
@@ -104,7 +104,7 @@ def test_file_without_audio_track_is_rejected(tmp_path):
     video = tmp_path / "video.mp4"
     ffmpeg("-f", "lavfi", "-i", "color=black:size=64x64:duration=1", "-c:v", "mpeg4", str(video))
 
-    with pytest.raises(AudioConversionError, match="Aucune piste audio"):
+    with pytest.raises(AudioConversionError, match="No audio track"):
         convert.probe(video)
 
 

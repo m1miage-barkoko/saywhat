@@ -13,7 +13,7 @@ def binary():
     try:
         return model_registry.deepfilter_binary_path(get_settings().bin_dir)
     except ModelNotAvailableError:
-        pytest.skip("DeepFilterNet non téléchargé (python -m app.download_models)")
+        pytest.skip("DeepFilterNet not downloaded (python -m app.download_models)")
 
 
 @requires_ffmpeg
@@ -33,7 +33,7 @@ def test_denoised_audio_keeps_duration_and_timing(binary, tmp_path):
 
 def test_failure_raises_a_readable_error(binary, tmp_path):
     not_audio = tmp_path / "not_audio.wav"
-    not_audio.write_text("ceci n'est pas un fichier audio")
+    not_audio.write_text("this is not an audio file")
 
-    with pytest.raises(DenoiseError, match="Le débruitage a échoué"):
+    with pytest.raises(DenoiseError, match="Noise reduction failed"):
         DeepFilterNetDenoiser(binary).denoise(not_audio, tmp_path / "out.wav")

@@ -30,7 +30,7 @@ class PyannoteDiarizer:
         # Loading from the local folder needs neither a token nor the network.
         pipeline = Pipeline.from_pretrained(model_dir)
         if pipeline is None:
-            raise ModelNotAvailableError(f"Impossible de charger le modèle {model_id}.")
+            raise ModelNotAvailableError(f"Could not load the model {model_id}.")
         self._pipeline = pipeline.to(torch.device(device))
 
     def diarize(

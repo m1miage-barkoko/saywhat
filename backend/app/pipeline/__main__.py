@@ -53,8 +53,8 @@ def main(argv: list[str] | None = None) -> int:
         batch_size=settings.batch_size,
         cpu_threads=settings.cpu_threads,
     )
-    print(f"Matériel : {device.description}", file=sys.stderr)
-    print(f"Modèle : {options.whisper_model or settings.whisper_model}", file=sys.stderr)
+    print(f"Hardware: {device.description}", file=sys.stderr)
+    print(f"Model: {options.whisper_model or settings.whisper_model}", file=sys.stderr)
 
     work_dir = args.work_dir or settings.data_dir / "cli" / args.input.stem
     skipped = {"denoise"} if args.no_denoise else set()
@@ -68,11 +68,11 @@ def main(argv: list[str] | None = None) -> int:
         )
     except PipelineError as exc:
         progress.interrupt()
-        print(f"Erreur : {exc}", file=sys.stderr)
+        print(f"Error: {exc}", file=sys.stderr)
         return 1
     except KeyboardInterrupt:
         progress.interrupt()
-        print("Interrompu.", file=sys.stderr)
+        print("Interrupted.", file=sys.stderr)
         return 130
 
     output = args.output or work_dir / "transcript.json"
@@ -82,15 +82,15 @@ def main(argv: list[str] | None = None) -> int:
     transcript = result.transcript
     elapsed = time.perf_counter() - started
     print(
-        f"\n{len(transcript.speakers)} intervenant(s), {len(transcript.segments)} segments. "
-        f"Audio de {transcript.duration:.0f} s traité en {elapsed:.0f} s "
-        f"(×{transcript.duration / elapsed:.1f} temps réel).",
+        f"\n{len(transcript.speakers)} speaker(s), {len(transcript.segments)} segments. "
+        f"{transcript.duration:.0f} s of audio processed in {elapsed:.0f} s "
+        f"(×{transcript.duration / elapsed:.1f} real time).",
         file=sys.stderr,
     )
-    print(f"JSON : {output}", file=sys.stderr)
-    print(f"Audio : {result.audio_path}", file=sys.stderr)
+    print(f"JSON: {output}", file=sys.stderr)
+    print(f"Audio: {result.audio_path}", file=sys.stderr)
     if result.denoised_audio_path:
-        print(f"Audio débruité : {result.denoised_audio_path}", file=sys.stderr)
+        print(f"Denoised audio: {result.denoised_audio_path}", file=sys.stderr)
     print(file=sys.stderr)
     print(format_transcript(transcript))
     return 0
@@ -100,31 +100,31 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m app.pipeline",
         description=(
-            "Transcrit un enregistrement en français en séparant les intervenants. "
-            "Tout s'exécute sur cet ordinateur."
+            "Transcribe a French recording and separate the speakers. "
+            "Everything runs on this computer."
         ),
     )
-    parser.add_argument("input", type=Path, help="fichier audio (m4a, mp3, wav, ogg, amr, 3gp…)")
+    parser.add_argument("input", type=Path, help="audio file (m4a, mp3, wav, ogg, amr, 3gp…)")
     parser.add_argument(
-        "-o", "--output", type=Path, help="fichier JSON à écrire (défaut : dans --work-dir)"
+        "-o", "--output", type=Path, help="JSON file to write (default: in --work-dir)"
     )
     parser.add_argument(
         "--work-dir",
         type=Path,
-        help="dossier des fichiers audio intermédiaires (défaut : data/cli/<nom du fichier>)",
+        help="folder for intermediate audio files (default: data/cli/<file name>)",
     )
     parser.add_argument(
-        "--model", choices=list(WHISPER_MODELS), help="modèle de transcription (défaut : .env)"
+        "--model", choices=list(WHISPER_MODELS), help="transcription model (default: from .env)"
     )
-    parser.add_argument("--no-denoise", action="store_true", help="ne pas débruiter l'audio")
+    parser.add_argument("--no-denoise", action="store_true", help="skip noise reduction")
     parser.add_argument(
-        "--no-diarize", action="store_true", help="ne pas séparer les intervenants (plus rapide)"
+        "--no-diarize", action="store_true", help="do not separate the speakers (faster)"
     )
-    parser.add_argument("--speakers", type=int, help="nombre exact d'intervenants, si connu")
-    parser.add_argument("--min-speakers", type=int, help="nombre minimum d'intervenants")
-    parser.add_argument("--max-speakers", type=int, help="nombre maximum d'intervenants")
+    parser.add_argument("--speakers", type=int, help="exact number of speakers, if known")
+    parser.add_argument("--min-speakers", type=int, help="minimum number of speakers")
+    parser.add_argument("--max-speakers", type=int, help="maximum number of speakers")
     parser.add_argument(
-        "--device", choices=["auto", "cuda", "mps", "cpu"], help="forcer le matériel utilisé"
+        "--device", choices=["auto", "cuda", "mps", "cpu"], help="force the hardware to use"
     )
     return parser
 
@@ -148,11 +148,11 @@ class _ConsoleProgress:
         if fraction >= 1.0:
             self._done.add(step)
             status = (
-                "désactivé"
+                "skipped"
                 if step in self._skipped
-                else f"terminé en {time.perf_counter() - self._started[step]:.1f} s"
+                else f"done in {time.perf_counter() - self._started[step]:.1f} s"
             )
-            line = f"\r{label:<42} {status}\033[K" if self._live else f"{label} : {status}"
+            line = f"\r{label:<42} {status}\033[K" if self._live else f"{label}: {status}"
             self._write(line + "\n")
             self._pending_line = False
         elif self._live:

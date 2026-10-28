@@ -22,7 +22,7 @@ from typing import Literal
 
 from app.pipeline.errors import MissingTokenError, ModelNotAvailableError
 
-DOWNLOAD_HINT = "Lancez d'abord : uv run python -m app.download_models"
+DOWNLOAD_HINT = "Run this first: uv run python -m app.download_models"
 
 # --------------------------------------------------------------------------
 # Transcription (Whisper)
@@ -47,8 +47,8 @@ WHISPER_MODELS: dict[str, WhisperModelSpec] = {
     for spec in (
         WhisperModelSpec(
             id="bofenghuang/whisper-large-v3-french",
-            label="Whisper large-v3 français",
-            description="Meilleure précision en français (large-v3 affiné sur du français).",
+            label="Whisper large-v3 French",
+            description="Best accuracy in French (large-v3 fine-tuned on French).",
             repo_id="bofenghuang/whisper-large-v3-french",
             format="ctranslate2",
             subfolder="ctranslate2",
@@ -57,7 +57,7 @@ WHISPER_MODELS: dict[str, WhisperModelSpec] = {
         WhisperModelSpec(
             id="large-v3",
             label="Whisper large-v3",
-            description="Modèle multilingue officiel d'OpenAI.",
+            description="Official multilingual model from OpenAI.",
             repo_id="Systran/faster-whisper-large-v3",
             format="ctranslate2",
             download_gb=3.1,
@@ -65,7 +65,7 @@ WHISPER_MODELS: dict[str, WhisperModelSpec] = {
         WhisperModelSpec(
             id="large-v3-turbo",
             label="Whisper large-v3 turbo",
-            description="Multilingue, nettement plus rapide, un peu moins précis.",
+            description="Multilingual, much faster, slightly less accurate.",
             # Formerly mobiuslabsgmbh/faster-whisper-large-v3-turbo (renamed on the Hub).
             repo_id="dropbox-dash/faster-whisper-large-v3-turbo",
             format="ctranslate2",
@@ -73,8 +73,8 @@ WHISPER_MODELS: dict[str, WhisperModelSpec] = {
         ),
         WhisperModelSpec(
             id="eustlb/distil-large-v3-fr",
-            label="Distil-Whisper large-v3 français",
-            description="Beaucoup plus rapide, légèrement moins précis. Idéal sans GPU.",
+            label="Distil-Whisper large-v3 French",
+            description="Much faster, slightly less accurate. Good without a GPU.",
             repo_id="eustlb/distil-large-v3-fr",
             format="transformers",
             download_gb=1.5,
@@ -101,7 +101,7 @@ def get_whisper_spec(model_id: str) -> WhisperModelSpec:
     except KeyError:
         known = ", ".join(WHISPER_MODELS)
         raise ModelNotAvailableError(
-            f"Modèle de transcription inconnu : {model_id}", hint=f"Modèles disponibles : {known}"
+            f"Unknown transcription model: {model_id}", hint=f"Available models: {known}"
         ) from None
 
 
@@ -123,7 +123,7 @@ def whisper_model_path(model_id: str, *, models_dir: Path, download: bool = Fals
         return converted
     if not download:
         raise ModelNotAvailableError(
-            f"Le modèle « {spec.label} » n'est pas encore téléchargé.", hint=DOWNLOAD_HINT
+            f"The model “{spec.label}” has not been downloaded yet.", hint=DOWNLOAD_HINT
         )
     source = _hf_snapshot(
         spec.repo_id, allow_patterns=list(_TRANSFORMERS_FILES), download=True, what=spec.label
@@ -163,14 +163,14 @@ def diarization_model_path(model_id: str, *, token: str | None, download: bool =
     """
     if download and not token:
         raise MissingTokenError(
-            "Un jeton Hugging Face est nécessaire pour télécharger le modèle de diarisation.",
+            "A Hugging Face token is needed to download the diarization model.",
             hint=(
-                f"Acceptez les conditions sur https://huggingface.co/{model_id}, créez un jeton "
-                "(lecture) sur https://huggingface.co/settings/tokens, puis ajoutez "
-                "HF_TOKEN=... dans le fichier .env (voir README)."
+                f"Accept the conditions at https://huggingface.co/{model_id}, create a "
+                "(read) token at https://huggingface.co/settings/tokens, then add "
+                "HF_TOKEN=... to the .env file (see README)."
             ),
         )
-    return _hf_snapshot(model_id, download=download, token=token, what="diarisation (pyannote)")
+    return _hf_snapshot(model_id, download=download, token=token, what="diarization (pyannote)")
 
 
 # --------------------------------------------------------------------------
@@ -211,7 +211,7 @@ def download_sentence_splitter() -> None:
     import nltk
 
     if not nltk.download("punkt_tab", quiet=True):
-        raise ModelNotAvailableError("Le téléchargement du découpeur de phrases (NLTK) a échoué.")
+        raise ModelNotAvailableError("Downloading the sentence splitter (NLTK) failed.")
 
 
 # --------------------------------------------------------------------------
@@ -252,8 +252,8 @@ def deepfilter_binary_path(bin_dir: Path, *, download: bool = False) -> Path:
     key = (platform.system(), platform.machine())
     if key not in _DEEPFILTER_BUILDS:
         raise ModelNotAvailableError(
-            f"DeepFilterNet n'est pas disponible pour {key[0]} {key[1]}.",
-            hint="Désactivez le débruitage pour ce fichier.",
+            f"DeepFilterNet is not available for {key[0]} {key[1]}.",
+            hint="Turn noise reduction off for this file.",
         )
     target, sha256 = _DEEPFILTER_BUILDS[key]
     path = bin_dir / f"deep-filter-{DEEPFILTER_VERSION}-{target}"
@@ -261,7 +261,7 @@ def deepfilter_binary_path(bin_dir: Path, *, download: bool = False) -> Path:
         return path
     if not download:
         raise ModelNotAvailableError(
-            "Le programme de débruitage (DeepFilterNet) n'est pas encore téléchargé.",
+            "The noise reduction program (DeepFilterNet) has not been downloaded yet.",
             hint=DOWNLOAD_HINT,
         )
     bin_dir.mkdir(parents=True, exist_ok=True)
@@ -273,8 +273,8 @@ def deepfilter_binary_path(bin_dir: Path, *, download: bool = False) -> Path:
     if digest != sha256:
         partial.unlink()
         raise ModelNotAvailableError(
-            "Le fichier DeepFilterNet téléchargé est corrompu (somme de contrôle invalide).",
-            hint="Relancez le téléchargement.",
+            "The downloaded DeepFilterNet file is corrupted (checksum mismatch).",
+            hint="Run the download again.",
         )
     partial.chmod(partial.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     partial.replace(path)
@@ -308,11 +308,11 @@ def _hf_snapshot(
         )
     except LocalEntryNotFoundError:
         raise ModelNotAvailableError(
-            f"Le modèle « {what} » n'est pas encore téléchargé.", hint=DOWNLOAD_HINT
+            f"The model “{what}” has not been downloaded yet.", hint=DOWNLOAD_HINT
         ) from None
     except GatedRepoError:
         raise MissingTokenError(
-            f"Accès refusé au modèle « {what} ».",
-            hint=f"Acceptez ses conditions d'utilisation sur https://huggingface.co/{repo_id} "
-            "avec le compte du jeton HF_TOKEN.",
+            f"Access denied to the model “{what}”.",
+            hint=f"Accept its terms of use at https://huggingface.co/{repo_id} "
+            "with the account that owns the HF_TOKEN token.",
         ) from None

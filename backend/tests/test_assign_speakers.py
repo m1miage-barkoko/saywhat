@@ -175,8 +175,8 @@ def test_speakers_numbered_by_first_appearance():
 
     assert [s.speaker for s in segments] == ["S1", "S2", "S1", "S3"]
     assert [(s.id, s.label) for s in speakers] == [
-        ("S1", "Intervenant 1"),
-        ("S2", "Intervenant 2"),
-        ("S3", "Intervenant 3"),
+        ("S1", "Speaker 1"),
+        ("S2", "Speaker 2"),
+        ("S3", "Speaker 3"),
     ]
     assert raw[0].speaker == C  # input left untouched

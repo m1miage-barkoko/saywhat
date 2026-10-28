@@ -79,16 +79,16 @@ class Settings(BaseSettings):
             os.environ[variable] = path
 
     def synced_folder_warning(self) -> str | None:
-        """A French warning if the data folder is inside a cloud-synced folder."""
+        """A warning if the data folder is inside a cloud-synced folder."""
         resolved = self.data_dir.resolve()
         # iCloud skips any folder whose name ends in ".nosync".
         if any(part.endswith(".nosync") for part in resolved.parts):
             return None
         if any(marker in str(resolved) for marker in _SYNCED_FOLDER_MARKERS):
             return (
-                f"Attention : le dossier de données ({resolved}) se trouve dans un dossier "
-                "synchronisé avec le cloud. Vos enregistrements y seraient envoyés. "
-                "Déplacez le projet ou définissez VERBATIM_DATA_DIR dans .env."
+                f"Warning: the data folder ({resolved}) is inside a cloud-synced folder, "
+                "so your recordings would be uploaded. "
+                "Move the project or set VERBATIM_DATA_DIR in .env."
             )
         return None
 

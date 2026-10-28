@@ -104,7 +104,7 @@ class ProcessingOptions(BaseModel):
     @model_validator(mode="after")
     def _check_speaker_counts(self) -> Self:
         if self.num_speakers is not None and (self.min_speakers or self.max_speakers):
-            raise ValueError("Indiquez soit un nombre exact d'intervenants, soit un intervalle.")
+            raise ValueError("Give either an exact number of speakers or a range, not both.")
         if self.min_speakers and self.max_speakers and self.min_speakers > self.max_speakers:
-            raise ValueError("Le minimum d'intervenants dépasse le maximum.")
+            raise ValueError("The minimum number of speakers is above the maximum.")
         return self

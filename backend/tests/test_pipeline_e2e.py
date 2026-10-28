@@ -43,7 +43,7 @@ def run(pipeline, tmp_path, **options):
 def test_two_speakers_alternate(pipeline, tmp_path):
     transcript = run(pipeline, tmp_path).transcript
 
-    assert [s.label for s in transcript.speakers] == ["Intervenant 1", "Intervenant 2"]
+    assert [s.label for s in transcript.speakers] == ["Speaker 1", "Speaker 2"]
     paragraphs = merge_consecutive(transcript.segments)
     assert [p.speaker for p in paragraphs] == ["S1", "S2"] * 4
     for paragraph, keyword in zip(paragraphs, EXPECTED_TURNS, strict=True):
