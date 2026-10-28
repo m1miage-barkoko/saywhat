@@ -3,6 +3,9 @@
 /data/
 .env
 
+# Personal notes, kept on this machine only.
+/docs/project-guide.md
+
 # Python
 backend/.venv/
 __pycache__/
