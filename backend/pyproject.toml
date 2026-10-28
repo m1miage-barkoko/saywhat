@@ -1,7 +1,7 @@
 [project]
 name = "verbatim"
 version = "0.1.0"
-description = "Transcription locale de conversations en français avec séparation des intervenants"
+description = "Local transcription of French conversations with speaker separation"
 requires-python = ">=3.11,<3.13"
 dependencies = [
     # --- AI pipeline -------------------------------------------------------
