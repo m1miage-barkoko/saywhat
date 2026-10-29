@@ -2,7 +2,12 @@ from datetime import UTC, datetime
 
 import pytest
 
-from app.pipeline.segments import format_timestamp, format_transcript, merge_consecutive
+from app.pipeline.segments import (
+    format_plain_text,
+    format_timestamp,
+    format_transcript,
+    merge_consecutive,
+)
 from app.pipeline.types import ProcessingInfo, Segment, Speaker, Transcript
 
 
@@ -49,19 +54,28 @@ def test_format_timestamp(seconds, expected):
     assert format_timestamp(seconds) == expected
 
 
-def test_format_transcript_uses_speaker_labels():
-    transcript = Transcript(
-        duration=90,
-        speakers=[Speaker(id="S1", label="Speaker 1"), Speaker(id="S2", label="M. Dupont")],
-        segments=SEGMENTS,
-        info=ProcessingInfo(
-            whisper_model="m", diarization_model="d", device="cpu", denoised=True,
-            created_at=datetime(2026, 1, 1, tzinfo=UTC),
-        ),
-    )  # fmt: skip
+TRANSCRIPT = Transcript(
+    duration=90,
+    speakers=[Speaker(id="S1", label="Speaker 1"), Speaker(id="S2", label="M. Dupont")],
+    segments=SEGMENTS,
+    info=ProcessingInfo(
+        whisper_model="m", diarization_model="d", device="cpu", denoised=True,
+        created_at=datetime(2026, 1, 1, tzinfo=UTC),
+    ),
+)  # fmt: skip
 
-    assert format_transcript(transcript).splitlines() == [
+
+def test_format_transcript_uses_speaker_labels():
+    assert format_transcript(TRANSCRIPT).splitlines() == [
         "[00:01:12] Speaker 1: Bonjour, alors pour la livraison de mardi… On en est où ?",
         "[00:01:20] M. Dupont: Oui, il faudra prévoir deux palettes.",
         "[00:01:23] Speaker 1: Parfait. Merci.",
     ]
+
+
+def test_format_plain_text_keeps_only_the_words():
+    assert format_plain_text(TRANSCRIPT) == (
+        "Bonjour, alors pour la livraison de mardi… On en est où ?\n\n"
+        "Oui, il faudra prévoir deux palettes.\n\n"
+        "Parfait. Merci."
+    )

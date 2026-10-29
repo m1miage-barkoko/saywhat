@@ -51,3 +51,8 @@ def format_transcript(transcript: Transcript) -> str:
         f"[{format_timestamp(p.start)}] {transcript.speaker_label(p.speaker)}: {p.text}"
         for p in merge_consecutive(transcript.segments)
     )
+
+
+def format_plain_text(transcript: Transcript) -> str:
+    """Only the words: one paragraph per speaker turn, no timestamps or labels."""
+    return "\n\n".join(p.text for p in merge_consecutive(transcript.segments))

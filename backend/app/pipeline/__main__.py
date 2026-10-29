@@ -3,7 +3,8 @@
     uv run python -m app.pipeline enregistrement.m4a [options]
 
 Prints the speaker-labelled transcript on stdout, progress on stderr, and writes
-the full result (words, timestamps, speakers) as JSON.
+the full result (words, timestamps, speakers) as JSON, plus the transcript as
+text with and without speakers.
 """
 
 import argparse
@@ -19,7 +20,7 @@ from app.config import get_settings
 from app.pipeline.errors import PipelineError
 from app.pipeline.model_registry import WHISPER_MODELS
 from app.pipeline.runner import STEP_LABELS, STEPS, LocalModels, TranscriptionPipeline
-from app.pipeline.segments import format_transcript
+from app.pipeline.segments import format_plain_text, format_transcript
 from app.pipeline.types import ProcessingOptions
 
 
@@ -75,11 +76,15 @@ def main(argv: list[str] | None = None) -> int:
         print("Interrupted.", file=sys.stderr)
         return 130
 
-    output = args.output or work_dir / "transcript.json"
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(result.transcript.model_dump_json(indent=2), encoding="utf-8")
-
     transcript = result.transcript
+    output = args.output or work_dir / "transcript.json"
+    text_output = output.with_suffix(".txt")
+    plain_output = output.with_name(f"{output.stem}_plain.txt")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(transcript.model_dump_json(indent=2), encoding="utf-8")
+    text_output.write_text(format_transcript(transcript) + "\n", encoding="utf-8")
+    plain_output.write_text(format_plain_text(transcript) + "\n", encoding="utf-8")
+
     elapsed = time.perf_counter() - started
     print(
         f"\n{len(transcript.speakers)} speaker(s), {len(transcript.segments)} segments. "
@@ -88,6 +93,9 @@ def main(argv: list[str] | None = None) -> int:
         file=sys.stderr,
     )
     print(f"JSON: {output}", file=sys.stderr)
+    print(f"Text: {text_output}", file=sys.stderr)
+    print(f"Plain text: {plain_output}", file=sys.stderr)
+    print(f"Original audio: {result.original_audio_path}", file=sys.stderr)
     print(f"Audio: {result.audio_path}", file=sys.stderr)
     if result.denoised_audio_path:
         print(f"Denoised audio: {result.denoised_audio_path}", file=sys.stderr)
@@ -106,7 +114,10 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("input", type=Path, help="audio file (m4a, mp3, wav, ogg, amr, 3gp…)")
     parser.add_argument(
-        "-o", "--output", type=Path, help="JSON file to write (default: in --work-dir)"
+        "-o",
+        "--output",
+        type=Path,
+        help="JSON file to write; the .txt files go next to it (default: in --work-dir)",
     )
     parser.add_argument(
         "--work-dir",
