@@ -1,8 +1,8 @@
-# Verbatim
+# SayWhat
 
 **Local** transcription of French conversations, with speaker separation.
 
-Give it a phone recording (m4a, mp3, amr…) and Verbatim returns readable text where each voice is identified (`Speaker 1`, `Speaker 2`…):
+Give it a phone recording (m4a, mp3, amr…) and SayWhat returns readable text where each voice is identified (`Speaker 1`, `Speaker 2`…):
 
 ```
 [00:00:00] Speaker 1: Bonjour Claire, alors pour la livraison de mardi, on en est où ?
@@ -17,9 +17,9 @@ Give it a phone recording (m4a, mp3, amr…) and Verbatim returns readable text 
 Recordings contain other people's voices and confidential information.
 
 - **Everything runs on your computer.** No audio and no text is sent to an external service.
-- Only **one command** uses the network: `python -m app.download_models`, which downloads the models once. After that, Verbatim forces Hugging Face's offline mode (`app/privacy.py`) and works without a connection.
-- **Telemetry is forcibly disabled.** By default, pyannote.audio 4 sends usage statistics (file duration, number of speakers) to `otel.pyannote.ai`, and Hugging Face sends its own. Verbatim turns both off before they are loaded (tests check this).
-- Data is stored in `data/` (configurable). **Do not put this folder in a synced folder** (iCloud Drive, Dropbox, OneDrive…): your recordings would be uploaded. Verbatim shows a warning if it is.
+- Only **one command** uses the network: `python -m app.download_models`, which downloads the models once. After that, SayWhat forces Hugging Face's offline mode (`app/privacy.py`) and works without a connection.
+- **Telemetry is forcibly disabled.** By default, pyannote.audio 4 sends usage statistics (file duration, number of speakers) to `otel.pyannote.ai`, and Hugging Face sends its own. SayWhat turns both off before they are loaded (tests check this).
+- Data is stored in `data/` (configurable). **Do not put this folder in a synced folder** (iCloud Drive, Dropbox, OneDrive…): your recordings would be uploaded. SayWhat shows a warning if it is.
 
 ## Compatibility
 
@@ -152,7 +152,7 @@ A few non-obvious choices (explained in the code):
 - **Exclusive diarization**: pyannote is called directly, because WhisperX only exposes regular diarization, where overlapping speech gives several speakers at once. The exclusive version gives a single speaker at each instant, which is what we need to give each word to one person (`assign_speakers.py`).
 - **Untimed words**: the French alignment model's alphabet has no digits, so "1200" gets no timestamp and takes the speaker of the neighbouring word.
 - **Small errors at boundaries**: a lone word attributed to another voice in the middle of a sentence is treated as a diarization inaccuracy and given back to its neighbours.
-- **DeepFilterNet as a binary**: the `deepfilternet` Python package (last released in 2023) requires numpy < 2, which is incompatible with WhisperX (numpy ≥ 2.1). Verbatim uses the standalone program published by its authors (same DeepFilterNet3 model), checked against a pinned checksum.
+- **DeepFilterNet as a binary**: the `deepfilternet` Python package (last released in 2023) requires numpy < 2, which is incompatible with WhisperX (numpy ≥ 2.1). SayWhat uses the standalone program published by its authors (same DeepFilterNet3 model), checked against a pinned checksum.
 
 ## Pinned versions
 
@@ -167,11 +167,11 @@ A few non-obvious choices (explained in the code):
 
 All transitive dependencies are locked in `backend/uv.lock`.
 
-FFmpeg: any recent version. pyannote warns that `torchcodec` cannot find FFmpeg 4 to 7. This does not matter: Verbatim always hands it audio already decoded in memory (the warning is hidden).
+FFmpeg: any recent version. pyannote warns that `torchcodec` cannot find FFmpeg 4 to 7. This does not matter: SayWhat always hands it audio already decoded in memory (the warning is hidden).
 
 ## Uninstalling
 
-Everything Verbatim installs or generates, inside the project and outside it, and the commands to remove it: [UNINSTALL.md](UNINSTALL.md).
+Everything SayWhat installs or generates, inside the project and outside it, and the commands to remove it: [UNINSTALL.md](UNINSTALL.md).
 
 ## Development
 
@@ -192,4 +192,4 @@ uv run ruff check . && uv run ruff format .
 | `… has not been downloaded yet` | `uv run python -m app.download_models` |
 | `A Hugging Face token is needed` / `Access denied` | see "Hugging Face token"; check that the terms were accepted with the same account as the token |
 | Poor transcription of a noisy file | run it again with `--no-denoise` and compare |
-| "cloud-synced folder" warning | move the project out of iCloud Drive / Dropbox / OneDrive, or set `VERBATIM_DATA_DIR` in `.env` |
+| "cloud-synced folder" warning | move the project out of iCloud Drive / Dropbox / OneDrive, or set `SAYWHAT_DATA_DIR` in `.env` |

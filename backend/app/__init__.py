@@ -1,4 +1,4 @@
-"""Verbatim — local French conversation transcriber (backend)."""
+"""SayWhat — local French conversation transcriber (backend)."""
 
 from app import privacy
 

@@ -76,7 +76,7 @@ def _default_cpu_threads() -> int:
     # CTranslate2's CPU decoding stops scaling past a handful of threads, and
     # extra hyper-threads / efficiency cores mostly add contention. Measured on an
     # Apple M4 (4 performance + 6 efficiency cores), large-v3 int8, batch 8:
-    # 4 threads ×2.1 real time, 6 → ×2.4, 10 → ×2.2. Tune with VERBATIM_CPU_THREADS.
+    # 4 threads ×2.1 real time, 6 → ×2.4, 10 → ×2.2. Tune with SAYWHAT_CPU_THREADS.
     return min(os.cpu_count() or 4, _MAX_DEFAULT_THREADS)
 
 

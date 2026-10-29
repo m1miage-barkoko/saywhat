@@ -14,7 +14,7 @@ import warnings
 
 # pyannote (used by our diarizer and by WhisperX's voice-activity detector) warns
 # at import when torchcodec cannot find a supported FFmpeg (4 to 7). Irrelevant
-# here: we always hand pyannote in-memory waveforms, never files, so Verbatim
+# here: we always hand pyannote in-memory waveforms, never files, so SayWhat
 # works with whatever FFmpeg version is installed.
 warnings.filterwarnings("ignore", message=r"(?s).*torchcodec is not installed correctly")
 

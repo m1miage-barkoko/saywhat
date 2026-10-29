@@ -43,7 +43,7 @@ def _executable(name: str) -> str:
     if path is None:
         raise PipelineError(
             f"{name} not found.",
-            hint="Install ffmpeg (see the README), then start Verbatim again.",
+            hint="Install ffmpeg (see the README), then start SayWhat again.",
         )
     return path
 

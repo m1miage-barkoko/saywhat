@@ -1,5 +1,5 @@
 [project]
-name = "verbatim"
+name = "saywhat"
 version = "0.1.0"
 description = "Local transcription of French conversations with speaker separation"
 requires-python = ">=3.11,<3.13"

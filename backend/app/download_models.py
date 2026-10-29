@@ -1,11 +1,11 @@
-"""Download the AI models — the only Verbatim command that uses the network.
+"""Download the AI models — the only SayWhat command that uses the network.
 
     uv run python -m app.download_models                         # default model
     uv run python -m app.download_models --model large-v3-turbo  # another one
     uv run python -m app.download_models --all                   # every transcription model
 
 Already-downloaded models are skipped, so it is safe to run again. Afterwards,
-Verbatim works entirely offline.
+SayWhat works entirely offline.
 """
 
 import argparse
@@ -77,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
     if failures:
         print(f"\n{failures} item(s) missing. Fix the problems above and run this command again.")
         return 1
-    print("\nAll set. Verbatim can now run offline.")
+    print("\nAll set. SayWhat can now run offline.")
     return 0
 
 

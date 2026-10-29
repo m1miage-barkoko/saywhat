@@ -24,14 +24,14 @@ _SYNCED_FOLDER_MARKERS = ("Mobile Documents", "CloudStorage", "Dropbox", "OneDri
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=REPO_DIR / ".env",
-        env_prefix="VERBATIM_",
+        env_prefix="SAYWHAT_",
         extra="ignore",
     )
 
     data_dir: Path = REPO_DIR / "data"
     # Only needed once, to download the gated pyannote model (see README).
     hf_token: str | None = Field(
-        default=None, validation_alias=AliasChoices("HF_TOKEN", "VERBATIM_HF_TOKEN")
+        default=None, validation_alias=AliasChoices("HF_TOKEN", "SAYWHAT_HF_TOKEN")
     )
     whisper_model: str = DEFAULT_WHISPER_MODEL
     diarization_model: str = DEFAULT_DIARIZATION_MODEL
@@ -45,7 +45,7 @@ class Settings(BaseSettings):
 
     @property
     def models_dir(self) -> Path:
-        """Every model Verbatim downloads or converts (see use_local_model_dirs)."""
+        """Every model SayWhat downloads or converts (see use_local_model_dirs)."""
         return self.data_dir / "models"
 
     @property
@@ -57,7 +57,7 @@ class Settings(BaseSettings):
 
         By default each library writes to its own folder in the user's home
         (~/.cache/huggingface, ~/.cache/torch, ~/nltk_data, ~/.matplotlib). Redirecting
-        them here keeps everything Verbatim downloads inside the project, so deleting
+        them here keeps everything SayWhat downloads inside the project, so deleting
         the project removes it all. Most of these libraries read their variable once,
         when imported: entry points call this before importing any model code.
         """
@@ -88,7 +88,7 @@ class Settings(BaseSettings):
             return (
                 f"Warning: the data folder ({resolved}) is inside a cloud-synced folder, "
                 "so your recordings would be uploaded. "
-                "Move the project or set VERBATIM_DATA_DIR in .env."
+                "Move the project or set SAYWHAT_DATA_DIR in .env."
             )
         return None
 

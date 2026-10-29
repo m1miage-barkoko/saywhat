@@ -1,4 +1,4 @@
-"""Catalogue of the AI models Verbatim uses, and where to find them on disk.
+"""Catalogue of the AI models SayWhat uses, and where to find them on disk.
 
 Every ``*_path(download=False)`` function only looks in local caches; it raises
 :class:`ModelNotAvailableError` if something is missing. Passing

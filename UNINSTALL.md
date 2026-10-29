@@ -1,6 +1,6 @@
-# What Verbatim installs and generates, and how to remove it all
+# What SayWhat installs and generates, and how to remove it all
 
-Verbatim keeps as much as possible **inside the project folder**. A few tools cannot live there: they are listed here with the commands to remove them.
+SayWhat keeps as much as possible **inside the project folder**. A few tools cannot live there: they are listed here with the commands to remove them.
 
 ## 1. Inside the project folder (removed with it)
 
@@ -21,7 +21,7 @@ To remove a single model, delete its folder `data/models/huggingface/hub/models-
 
 To free space without uninstalling, you can delete `data/cli/` (old command-line results) and the cache folders listed above at any time: they are recreated when needed.
 
-Verbatim redirects the Hugging Face, PyTorch, NLTK and Matplotlib caches to `data/` (`Settings.use_local_model_dirs` in `backend/app/config.py`): it writes **nothing** to `~/.cache/huggingface`, `~/.cache/torch`, `~/nltk_data` or `~/.matplotlib`.
+SayWhat redirects the Hugging Face, PyTorch, NLTK and Matplotlib caches to `data/` (`Settings.use_local_model_dirs` in `backend/app/config.py`): it writes **nothing** to `~/.cache/huggingface`, `~/.cache/torch`, `~/nltk_data` or `~/.matplotlib`.
 
 ## 2. Outside the project
 
@@ -51,7 +51,7 @@ On a Mac, diarization and word alignment run on the GPU through Apple's Metal fr
 |---|---|
 | `$(getconf DARWIN_USER_TEMP_DIR)com.apple.MetalPerformanceShadersGraph/` | empty `mpsgraph-…` folders (0 bytes of data, several thousand folders after a few runs) |
 
-This folder is not under Verbatim's control (it ignores `TMPDIR`). **Restarting the Mac removes it** (verified): you only need to delete it by hand if you don't want to restart. It can be deleted at any time, and the next transcription creates it again.
+This folder is not under SayWhat's control (it ignores `TMPDIR`). **Restarting the Mac removes it** (verified): you only need to delete it by hand if you don't want to restart. It can be deleted at any time, and the next transcription creates it again.
 
 ### Hugging Face account
 
@@ -67,7 +67,7 @@ uv python uninstall 3.12
 uv cache clean
 
 # 2. The project itself (environment, models, data, caches, .env)
-rm -rf path/to/verbatim      # for example ~/IdeaProjects/verbatim
+rm -rf path/to/saywhat       # for example ~/IdeaProjects/saywhat
 
 # 3. Empty folders left by Apple's Metal framework (or simply restart the Mac)
 rm -rf "$(getconf DARWIN_USER_TEMP_DIR)com.apple.MetalPerformanceShadersGraph"
