@@ -41,6 +41,7 @@ StepProgress = Callable[[str, float], None]
 @dataclass
 class PipelineResult:
     transcript: Transcript
+    original_audio_path: Path  # copy of the source file, unchanged
     audio_path: Path  # 16 kHz, normalised, not denoised
     denoised_audio_path: Path | None  # 16 kHz, normalised, denoised
 
@@ -110,7 +111,7 @@ class TranscriptionPipeline:
         options: ProcessingOptions,
         on_progress: StepProgress | None = None,
     ) -> PipelineResult:
-        """Process `src` (left untouched); intermediate audio files go to `work_dir`."""
+        """Process `src` (left untouched); its copy and the audio files go to `work_dir`."""
         settings = self.models.settings
         model_id = options.whisper_model or settings.whisper_model
         model_registry.get_whisper_spec(model_id)  # fail fast on a typo, before any work
@@ -132,6 +133,7 @@ class TranscriptionPipeline:
 
         with step("convert") as progress:
             info = convert.probe(src)
+            original = convert.keep_original(src, work_dir)
             convert.to_wav(src, clean_wav, duration=info.duration, progress=progress)
 
         with step("denoise"):
@@ -177,6 +179,7 @@ class TranscriptionPipeline:
         )
         return PipelineResult(
             transcript=transcript,
+            original_audio_path=original,
             audio_path=clean_wav,
             denoised_audio_path=denoised_wav if options.denoise else None,
         )
