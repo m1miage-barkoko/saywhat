@@ -13,7 +13,7 @@ Verbatim keeps as much as possible **inside the project folder**. A few tools ca
 | `data/models/nltk/` | sentence splitting | about 15 MB |
 | `data/bin/` | DeepFilterNet noise reduction program | about 30 MB |
 | `data/cache/` | Matplotlib font cache | < 1 MB |
-| `data/cli/` | command-line results (converted audio, JSON) | depends on use |
+| `data/cli/` | command-line results (copy of each recording, converted audio, JSON and text) | depends on use: the size of each recording, plus about 230 MB per hour of audio (the two WAV files) |
 | `backend/.pytest_cache/`, `backend/.ruff_cache/`, `__pycache__/` folders | test, lint and Python bytecode caches | a few MB |
 | `.env` | your settings and the Hugging Face token | — |
 

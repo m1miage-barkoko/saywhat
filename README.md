@@ -83,7 +83,17 @@ cd backend
 uv run python -m app.pipeline ~/Downloads/meeting.m4a
 ```
 
-The text is printed in the terminal. The full result (words, timestamps, speakers) is written as JSON to `data/cli/<file name>/transcript.json`, together with the converted audio (`audio.wav`) and the denoised audio (`audio_denoised.wav`) so you can compare them. The original file is never modified.
+The text is printed in the terminal. Everything is saved in `data/cli/<file name>/`:
+
+| File | Contents |
+|---|---|
+| `transcript.json` | the full result: words, timestamps, speakers |
+| `transcript.txt` | the text as printed, one line per speaker turn with timestamp and speaker |
+| `transcript_plain.txt` | the words only, one paragraph per speaker turn |
+| `original.<ext>` | an unchanged copy of the recording |
+| `audio.wav`, `audio_denoised.wav` | the converted and denoised audio, to compare them |
+
+The original file is never modified.
 
 | Option | Effect |
 |---|---|
@@ -92,7 +102,7 @@ The text is printed in the terminal. The full result (words, timestamps, speaker
 | `--no-denoise` | skip noise reduction (it sometimes makes transcription worse) |
 | `--model large-v3-turbo` | another transcription model (see below) |
 | `--no-diarize` | do not separate the speakers (faster) |
-| `-o result.json` | where to write the JSON |
+| `-o result.json` | where to write the JSON (the `.txt` files go next to it) |
 
 ## Choosing a model
 

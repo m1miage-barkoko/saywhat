@@ -152,7 +152,7 @@ When it is done, the conversation is shown in the Terminal, one line per speaker
 
 ![Terminal showing a finished transcription with Speaker 1 and Speaker 2](docs/images/how-to-install/11-transcription-result.png)
 
-A copy is saved in the `verbatim` folder, under `data/cli/` then the name of your recording.
+Everything is saved in the `verbatim` folder, under `data/cli/` then the name of your recording: the text with speakers (`transcript.txt`), the text alone (`transcript_plain.txt`) and a copy of the recording.
 
 **Tip:** if you know how many people speak, say so: the speaker separation is more reliable. For example, for 3 people:
 
