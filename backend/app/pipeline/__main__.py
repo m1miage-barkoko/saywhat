@@ -95,7 +95,6 @@ def main(argv: list[str] | None = None) -> int:
     print(f"JSON: {output}", file=sys.stderr)
     print(f"Text: {text_output}", file=sys.stderr)
     print(f"Plain text: {plain_output}", file=sys.stderr)
-    print(f"Original audio: {result.original_audio_path}", file=sys.stderr)
     print(f"Audio: {result.audio_path}", file=sys.stderr)
     if result.denoised_audio_path:
         print(f"Denoised audio: {result.denoised_audio_path}", file=sys.stderr)

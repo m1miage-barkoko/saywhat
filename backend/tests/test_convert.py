@@ -59,27 +59,6 @@ def test_original_is_never_modified(tmp_path):
     assert _sha256(src) == before
 
 
-def test_keep_original_copies_the_file_unchanged(tmp_path):
-    src = tmp_path / "Meeting.M4A"
-    src.write_bytes(DIALOGUE.read_bytes())
-
-    copy = convert.keep_original(src, tmp_path / "result")
-
-    assert copy == tmp_path / "result" / "original.m4a"
-    assert _sha256(copy) == _sha256(src)
-    assert src.is_file()
-    assert not list((tmp_path / "result").glob("*.part"))
-
-
-def test_keep_original_skips_a_file_already_in_place(tmp_path):
-    src = tmp_path / "original.m4a"
-    src.write_bytes(DIALOGUE.read_bytes())
-    before = _sha256(src)
-
-    assert convert.keep_original(src, tmp_path) == src
-    assert _sha256(src) == before
-
-
 def test_loudness_is_normalised(tone, tmp_path):
     quiet = tone("quiet.wav", "-c:a", "pcm_s16le", seconds=5, volume=0.01)
 

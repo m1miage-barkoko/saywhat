@@ -139,27 +139,6 @@ def to_wav(
     return dst
 
 
-def keep_original(src: Path, work_dir: Path) -> Path:
-    """Copy `src` into `work_dir` as `original.<ext>`, so a result keeps its source.
-
-    Written to a temporary file then renamed, like `to_wav`. Nothing is copied if
-    `src` already is that file (a run started from its own folder).
-    """
-    dst = work_dir / f"original{src.suffix.lower()}"
-    if dst.exists() and dst.samefile(src):
-        return dst
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    tmp = dst.with_name(dst.name + ".part")
-    try:
-        shutil.copy2(src, tmp)
-    except OSError as exc:
-        tmp.unlink(missing_ok=True)
-        message = f"Could not copy {src.name} next to the result."
-        raise PipelineError(message, hint=str(exc)) from exc
-    tmp.replace(dst)
-    return dst
-
-
 def load_wav(path: Path) -> np.ndarray:
     """Load a WAV produced by `to_wav` as float32 samples in [-1, 1]."""
     audio, sample_rate = sf.read(path, dtype="float32", always_2d=False)

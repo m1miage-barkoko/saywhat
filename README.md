@@ -90,7 +90,6 @@ The text is printed in the terminal. Everything is saved in `data/cli/<file name
 | `transcript.json` | the full result: words, timestamps, speakers |
 | `transcript.txt` | the text as printed, one line per speaker turn with timestamp and speaker |
 | `transcript_plain.txt` | the words only, one paragraph per speaker turn |
-| `original.<ext>` | an unchanged copy of the recording |
 | `audio.wav`, `audio_denoised.wav` | the converted and denoised audio, to compare them |
 
 The original file is never modified.

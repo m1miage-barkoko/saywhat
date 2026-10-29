@@ -55,7 +55,6 @@ def test_without_denoising_or_diarization(pipeline, tmp_path):
 
     assert result.denoised_audio_path is None
     assert result.audio_path.is_file()
-    assert result.original_audio_path.read_bytes() == DIALOGUE.read_bytes()
     assert {s.speaker for s in result.transcript.segments} == {"S1"}
     text = " ".join(s.text for s in result.transcript.segments).lower()
     assert all(keyword in text for keyword in EXPECTED_TURNS)
